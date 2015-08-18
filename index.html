@@ -57,6 +57,7 @@
             <li>Drawing polygons with Google Maps</li>
             <li>Wrap-up & Questions</li>
           </ul>
+          <h3>Stop me at any time with questions</h3>
         </section>
 
         <section>
@@ -127,6 +128,26 @@
                 </tbody>
               </table>
             </div>
+
+            <div>
+              <div><a href="https://www.walkscore.com/professional/travel-time-http-api.php">api2.walkscore.com</a></div>
+              <table class="api-info" align="left">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>URL</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="odd">
+                    <td>traveltime</th>
+                    <td>/api/v1/traveltime/json</td>
+                    <td>Returns the travel time for a given location.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
@@ -160,6 +181,30 @@ router.get('/api/stop/:id', function *() {
 
         <section>
           <section>
+            <h1>Getting the walk score</h1>
+            <pre><code style="max-height: 500px;">
+function getWalkScore(address, location) {
+  let deferred = Q.defer();
+  let url = 'http://api.walkscore.com/score?format=json&address='
+    + address + '&lat=' + location.lat + '&lon=' + location.lng
+    + '&wsapikey=' + globalKeys.walkScoreApiKey;
+
+  http.get(url, deferred.resolve);
+
+  return deferred.promise;
+}
+
+router.get('/api/walk/:address', function *(next) {
+  let address = this.params.address;
+  let location = ???
+  let walkScore = yield getWalkScore(address, location);
+
+  this.body = walkScore;
+});
+            </code></pre>
+          </section>
+
+          <section>
             <p>I have an address, say:</p>
             <div>  2025 1st Ave, Suite 500</div>
             <div>  Seattle, WA</div>
@@ -183,12 +228,12 @@ function getLocationFromGoogle(address) {
   return deferred.promise;
 }
 // Example usage:
-router.get('/api/stops/:address', function *(next) {
+router.get('/api/walk/:address', function *(next) {
   let address = this.params.address;
   let location = yield getLocationFromGoogle(address);
-  let stops = yield getStops(location);
+  let walkScore = yield getWalkScore(location);
 
-  this.body = stops;
+  this.body = walkScore;
 });
             </code></pre>
           </section>
@@ -308,28 +353,72 @@ function getJsonBody(callback) {
 }
             </code></pre>
           </section>
+
+          <section>
+            <!-- Travel Time -->
+            <pre><code style="max-height: 500px;">
+» curl localhost:3001/api/travel/\
+  2025%201st%20Avenue%20Suite%20500,%20Seattle,%20WA%2098121
+{
+    "status": "OK"
+  , "response": {
+      "origin": "47.6114682,-122.3438233"
+    , "geometry": {
+        "type": "MultiPolygon"
+      , "coordinates": [[[
+          [
+            -122.35287965477173
+          , 47.65320077612875
+          ]
+           ...
+        ]]]
+    }
+    , "mode": "bike"
+    , "precision": 3
+    , "time": 20
+  }
+}
+            </code></pre>
+          </section>
         </section>
 
         <section>
           <section>
             <h1>Using the polygon data</h1>
             <pre><code style="max-height: 600px;">
-var map;
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 47.61, lng: -122.34 },
     zoom: 14
   });
 
-  var routeCoords = linestringToCoordinates(testRoute.geometry_wkt);
-  var route = new google.maps.Polyline({
-      path: routeCoords,
-      geodesic: true,
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.8,
-      strokeWeight: 2
-    });
-  route.setMap(map);
+  getRoute().then(function(payload) {
+    var routeCoords = linestringToCoordinates(payload.geometry_wkt);
+    var route = new google.maps.Polyline({
+        path: routeCoords,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2
+      });
+    route.setMap(map);
+  });
+}
+            </code></pre>
+          </section>
+
+          <section>
+            <pre><code>
+function getRoute() {
+  var url = "http://localhost:3001/api/route/6fffc9e7af7a9a444b12fd2ae2685281ab42bc1e";
+  var deferred = Q.defer();
+  var xhr = new XMLHttpRequest();
+  xhr.addEventListener('load', function() {
+    deferred.resolve(JSON.parse(this.responseText));
+  });
+  xhr.open("get", url, true);
+  xhr.send();
+  return deferred.promise;
 }
             </code></pre>
           </section>
@@ -350,6 +439,64 @@ function linestringToCoordinates(linestring) {
           </section>
 
           <section>
+            <img src="http://localhost:3001/route.png"></img>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>More polygon data</h1>
+            <pre><code style="max-height: 600px;">
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 47.61, lng: -122.34 },
+    zoom: 13
+  });
+
+  getTravelTimePolygon().then(function(payload) {
+    var polyCoords = convertCoordinates(payload.response.geometry.coordinates);
+    var polygon = new google.maps.Polyline({
+        path: polyCoords,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2
+      });
+    polygon.setMap(map);
+  });
+}
+            </code></pre>
+          </section>
+
+          <section>
+            <pre><code>
+function getTravelTimePolygon() {
+  var url = "http://localhost:3001/api/travel/2025%201st%20Avenue%20Suite%20500,%20Seattle,%20WA%2098121";
+  var deferred = Q.defer();
+  var xhr = new XMLHttpRequest();
+  xhr.addEventListener('load', function() {
+    deferred.resolve(JSON.parse(this.responseText));
+  });
+  xhr.open("get", url, true);
+  xhr.send();
+  return deferred.promise;
+}
+            </code></pre>
+          </section>
+
+          <section>
+            <pre><code>
+function convertCoordinates(walkscoreCoords) {
+  return walkscoreCoords[0][0]
+    .map(function(coord) {
+      console.log(coord);
+      return { lat: parseFloat(coord[1]), lng: parseFloat(coord[0]) };
+    });
+}
+            </code></pre>
+          </section>
+
+          <section>
             <img src="http://localhost:3001/polygon.png"></img>
           </section>
         </section>
@@ -363,6 +510,7 @@ function linestringToCoordinates(linestring) {
               <ul style="list-style: none;">
                 <li><a href="https://www.walkscore.com/professional/api.php">Walk</a><li>
                 <li><a href="https://www.walkscore.com/professional/public-transit-api.php">Transit</a></li>
+                <li><a href="https://www.walkscore.com/professional/travel-time-http-api.php">Travel Time</a></li>
                 <li><a href="https://developers.google.com/maps/documentation/javascript/3.exp/reference">Maps</a></li>
                 <li><a href="https://developers.google.com/maps/documentation/geocoding/intro">Geocoding</a></li>
               </ul></li>
@@ -381,12 +529,12 @@ function linestringToCoordinates(linestring) {
 git clone https://doug.wade@stash.redfin.com/scm/~doug.wade/presentations.git
               </code>
             </pre>
-						Get the code:
-						<pre>
-							<code>
+            Get the code:
+            <pre>
+              <code>
 git clone https://doug.wade@stash.redfin.com/scm/~doug.wade/api-talk.git
-							</code>
-						</pre>
+              </code>
+            </pre>
           </p>
         </section>
 
