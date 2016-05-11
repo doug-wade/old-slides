@@ -65,12 +65,14 @@
 						<li>nagios alerts</li>
 						<li>endpoint testing</li>
 						<li>data imports</li>
+						<li>walk score deployments</li>
 					</ul>
 					<aside class="notes">
 						These are smaller uses; just emphasizing Python's ubiquity
 						Our nagios alerts are a subset used to monitor Jenkins
 						Our test team uses python to run performance tests against the site
 						The data team uses python for listings imports, photos
+						walk score uses boto to identify aws hosts and multiprocessing to manage pools
 					</aside>
 				</section>
 				<section data-markdown data-separator-notes="^Aside:" data-transition="fade">
@@ -130,6 +132,10 @@
         },
     )
 					</code></pre>
+					<aside class="notes">
+						This is an example rule -- the implementation is the function; the rule is the build script function invocation
+						Note that skylark is a subset to enforce hermeticism
+					</aside>
 				</section>
 				<section data-transition="fade">
 					<img
@@ -142,6 +148,11 @@
 					<h3>streamlines deploy and sysadmin tasks</h3>
 
 				<p>Manages: servers - databases - solr - ci fleet - deployments</p>
+				<aside class="notes">
+					Used almost exclusively for deployments
+					Is managed by a Google doc that is translated to xml and then updates the google doc with timing data
+					Manage everything except a small subset of ops boxes that aren't deployed to
+				</aside>
 				</section>
 				<section data-transition="fade">
 					<img
@@ -165,6 +176,11 @@
             return (retstring, retval)
         return ('Success', 0)
 				</code></pre>
+				<aside class="notes">
+					This is an example rule -- all methods are named do_work and operate on each host
+					We define groups of hosts that can be operated on, or single boxes
+					It helped us coordinate deploys when developers managed deploy steps individually
+				</aside>
 				</section>
 				<section data-transition="fade">
 					<img
@@ -183,6 +199,8 @@
 					</ul>
 					<aside class="notes">
 						The reference vm was 4 cores with 4GB memory.
+						Scales to 2000 imgs/sec; we run at 200 imgs/sec in prod
+						Planning on open-sourcing it
 					</aside>
 				</section>
 				<section data-transition="fade">
@@ -203,7 +221,10 @@
 						<li>built with <a href="http://pytest.org/latest/">py.test</a> and <a href="http://springpython.webfactional.com/">Spring Python</a></li>
 					</ul>
 					<aside class="notes">
-						Something extra
+						We use it for the analytics cd pipeline to make sure changes are good
+						Uses an existing EC2 instance to grab data from an S3 bucket and put it in Redshift
+						Uses text files to test loads into our PostgreSql instances
+						Does regression testing for the data team
 					</aside>
 				</section>
 				<section data-transition="fade">
@@ -221,14 +242,18 @@
     </constructor-arg>
     <constructor-arg name="assertions">
         <list>
-            <object id='trivial python assertion' class="etltest.PythonAssert">
-                <!--a trivial PythonAssert just to show how it works-->
+            <object id='trivial' class="etltest.PythonAssert">
+                <!--a trivial PythonAssert to show how it works-->
                 <constructor-arg name="code" value="2+2 == 4"/>
             </object>
         </list>
     </constructor-arg>
 </object>
 					</code></pre>
+					<aside class="notes">
+						This is a very simple test case that only asserts that 2+2 = 4
+						In real tests, you provide source, dest, and a pipeline
+					</aside>
 				</section>
 				<section data-transition="fade">
 					<img
@@ -247,13 +272,24 @@
 						<li>counts events from Redshift table and generates static site</li>
 					</ul>
 					<aside class="notes">
-						Something extra
+						Something extra -- try to cut this
+						Probably not the best example, but handles millions of events daily
 					</aside>
 				</section>
 				<section data-transition="fade">
 					<h1>We're Hiring!</h1>
 					<h3><a href="http://www.redfin.com/about/jobs/hq">Jobs site</a></h3>
 					<h5>Contact us: <a href="mailto:techrecruiting@redfin.com">techrecruiting@redfin.com</a></h5>
+				</section>
+				<section>
+					<h1>Questions?</h1>
+					<blockquote>
+						This couldn't possibly work, could it?  It can't be that easy, can it?  But it works! - Dan Fabulich
+					</blockquote>
+					<aside class="notes">
+						Mostly, our experience in Python has been: it shouldn't be this easy, but it is
+						Dan / jlo's story about starting a thread / process pool
+					</aside>
 				</section>
 			</div>
 		</div>
