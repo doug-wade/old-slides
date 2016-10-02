@@ -53,286 +53,24 @@
     <!-- Any section element inside of this container is displayed as a slide -->
     <div class="slides">
       <section>
-        <h1>Using Chrome's console</h1>
-        <h3>It's not just console.log anymore</h3>
+          <h1>Talks Slides</h1>
+          <ul>
+            <li><a href="/slides/meet-react-server.html">Meet React Server</a> (given at <a href="http://reactnl.org/">React NL 2016</a>)</li>
+            <li><a href="/slides/console.html">Using the javascipt console object</a></li>
+            <li><a href="/slides/walk-score-api.html">Using the Walk Score Api</a> (given at <a href="http://www.meetup.com/Seattle-API-Meetup/events/224380379/">Seattle Api Meetup, August 2016</a>)</li>
+            <li><a href="/slides/python-at-redfin.html">Python at Redfin</a> (given at <a href="https://www.redfin.com/blog/2016/05/python-at-redfin-slides.html">Puppy, May 2016</a>)</li>
+          </ul>
+      </section>
+
+      <section>
+        <h2>Who am I?</h2>
+        <h3>Doug Wade</h3>
         <p>
-          <small>Created by <a href="http://github.com/doug-wade">Doug Wade</a> / <a href="http://twitter.com/AShedOfTools">@AShedOfTools</a></small>
+          - Software Developer <br>
+          - Node enthusiast <br>
+          - Sounders Supporter <br>
         </p>
       </section>
-
-      <section>
-        <h1>console.log</h1>
-        <pre><code class="javascript">
-console.log("Karate, the 'Dane Cook' of martial arts?");
-> Karate, the 'Dane Cook' of martial arts?
-          </code></pre>
-        <img style="height: 400px; width: 400px;" class="fragment" src="/images/shamwow.jpg" />
-      </section>
-
-      <section>
-        <section>
-          <h1>log levels</h1>
-          <div>Info: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.debug()  </code></pre></div>
-          <div>Info: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.info()</code></pre></div>
-          <div>Info: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.log()</code></pre></div>
-          <div>Warn: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.warn() </code></pre></div>
-          <div>Error: <pre style="display: inline;"><code style="display: inline;" class="javascript">console.error()  </code></pre></div>
-
-          <p>
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.debug()</code></pre> and
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.info()</code></pre> are just aliases for
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.log()</code></pre>
-          </p>
-
-          <pre><code>
-  console.debug("Lana");
-  console.warn("Lana!");
-  console.error("LANA!!!");
-  console.info("Danger zone.");
-           </code></pre>
-        </section>
-
-        <section>
-          <img src="/images/log-levels.png" />
-        </section>
-      </section>
-
-      <section>
-        <h1>Format specifiers</h1>
-        <p>All log levels support string interpolation using format specifiers that correspond to the remaining parameters to the log function.</p>
-        <pre><code>
-var interjection = "Jeezy-petes!";
-console.log('Uses interjection %s', interjection);
-        </code></pre>
-      </section>
-
-      <section>
-        <h1>Format specifiers</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Specifier</th>
-              <th style="text-align: left">Output</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>%s</td>
-              <td style="text-align: left">String</td>
-            </tr>
-            <tr>
-              <td>%i or %d</td>
-              <td style="text-align: left">Integer</td>
-            </tr>
-            <tr>
-              <td>%f</td>
-              <td style="text-align: left">Floating point value</td>
-            </tr>
-            <tr>
-              <td>%o</td>
-              <td style="text-align: left">DOM element</td>
-            </tr>
-            <tr>
-              <td>%O</td>
-              <td style="text-align: left">JavaScript object</td>
-            </tr>
-            <tr>
-              <td>%c</td>
-              <td style="text-align: left">Applies CSS style rules as specified by a second parameter</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section>
-        <section>
-          <h1>Logging groups</h1>
-          <p>
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.group(label)</code></pre> starts a logging group, and
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.groupEnd()</code></pre> ends it.
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.groupCollapsed(label)</code></pre> begins a logging group that is collapsed by default.
-          </p>
-          <pre><code>
-  var characters = [
-    { name: 'Cyril', age: 45, aliases: ['Odie McCracken'] },
-    { name: 'Cheryl', age: 32, aliases: ['Carol', 'Cherlene'] },
-    { name: 'Lana', age: 33, aliases: ['Shirley Temper'] },
-    { name: 'Archer', age: 37, aliases: ['Duchess', 'Randy'] }
-  ];
-  characters.forEach((character) => {
-    console.group('Logging character ' + character.name);
-    console.groupCollapsed('Aliases');
-    character.aliases.forEach(alias => console.log('alias %s', alias));
-    console.groupEnd();
-    console.log('age %i', character.age);
-    console.groupEnd();
-  });
-          </code></pre>
-        </section>
-
-        <section>
-          <img src="/images/groups.png" />
-        </section>
-      </section>
-
-      <section>
-        <section>
-          <h1>Logging objects</h1>
-          <p>
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.dir(object)</code></pre>
-             outputs an object and its keys.
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.table(array)</code></pre>
-             outputs a tabular representation of an array of objects.
-          </p>
-          <pre><code>
-  var characters = [
-    { name: 'Krieger', age: 45, aliases: [] },
-    { name: 'Cheryl', age: 32, aliases: ['Carol', 'Cherlene'] },
-    { name: 'Lana', age: 33, aliases: ['Shirley Temper'] },
-    { name: 'Archer', age: 37, aliases: ['Duchess', 'Randy'] }
-  ]
-  console.dir(characters[3]);
-  console.table(characters);
-          </code></pre>
-          <aside class="notes">
-            <p>Here's code with dates to show dates
-              <pre><code class="javascript">
-  console.dir({ name: 'Archer', age: 37, aliases: ['Duchess', 'Randy'], created: new Date() });
-            </code></pre>
-              <pre><code class="javascript">
-  var characters = [
-    { name: 'Krieger', age: 45, aliases: [], created: new Date() },
-    { name: 'Cheryl', age: 32, aliases: ['Carol', 'Cherlene'], created: new Date() },
-    { name: 'Lana', age: 33, aliases: ['Shirley Temper'], created: new Date() },
-    { name: 'Archer', age: 37, aliases: ['Duchess', 'Randy'], created: new Date() }
-  ]
-  console.table(characters);
-            </code></pre>
-          </aside>
-        </section>
-        <section>
-          <img src="/images/dir.png" />
-        </section>
-        <section>
-          <img src="/images/tables.png" />
-        </section>
-      </section>
-
-      <section>
-        <section>
-          <h1>Stack Traces</h1>
-          <p>Log a stack trace using <pre style="display: inline;"><code style="display: inline;" class="javascript">console.trace(message)</code></pre><p>
-          <pre><code class="javascript">
-  (function one() {
-    (function two() {
-      (function three() {
-        console.trace("I have a stack trace");
-      })();
-    })();
-  })();
-          </code></pre>
-        </section>
-        <section>
-          <img src="/images/stack-traces.png" />
-        </section>
-      </section>
-
-      <section>
-        <section>
-          <h1>Assertions</h1>
-          <p>Perform ad-hoc tests with <pre style="display: inline;"><code style="display: inline;" class="javascript">console.assert(assertion, message)</code></pre></p>
-          <pre><code class="javascript">
-  function KriegerClone (number) {
-    this.number = number;
-    this.greetKrieger = function(timeOfDay) {
-      // should be less than; error intentional so assertion fails.
-      return 'Guten ' + (timeOfDay.getHours() > 17 ? 'Tag' : 'Abend')
-       + ' Klon-Bruder! Ich bin ' + this.number + '.';
-    }
-  }
-  var clone = new KriegerClone(42);
-  var testDate = new Date(2015, 8, 24, 16, 0, 0);
-  var expected = 'Guten Tag Klon-Bruder! Ich bin 42.';
-  console.assert(expected === clone.greetKrieger(testDate),
-    "Krieger clone should greet correctly");
-          </code></pre>
-        </section>
-        <section>
-          <img src="/images/assertions.png" />
-        </section>
-      </section>
-
-      <section>
-        <section>
-          <h1>Counting</h1>
-          <p>Use <pre style="display: inline;"><code style="display: inline;" class="javascript">console.count(message)</code></pre>
-             to count the number of times a message is logged.
-           </p>
-           <pre><code class="javascript">
-  var clones = new Array(100);
-  for (var i = 0; i < 100; i++) {
-    console.count("cloning Krieger.");
-    clones[i] = new KriegerClone(i);
-  }
-           </code></pre>
-        </section>
-        <section>
-          <img src="/images/counting.png" />
-        </section>
-      </section>
-
-      <section>
-        <section>
-          <h1>Timing</h1>
-          <p>Wrap a code block in
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.time(label)</code></pre> and
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.timeEnd(label)</code></pre> with the same label to time something. Use
-            <pre style="display: inline;"><code style="display: inline;" class="javascript">console.timeStamp(label)</code></pre> to mark the timeline with an event.
-          </p>
-          <pre><code class="javascript">
-  function KriegerClone (number) { this.number = number; }
-
-  var label = "Clone Krieger";
-  console.time(label);
-  var clones = new Array(1000000);
-  for (var i = 0; i < 1000000; i++) {
-    if (i === 500000) { console.timeStamp("Halfway there!") }
-    clones[i] = new KriegerClone(i);
-  }
-  console.timeEnd(label);
-          </code></pre>
-          <aside class="notes">
-            Note that time / timeEnd is unlike group / groupEnd and profile / profileEnd, neither of which require label to be passed to the end method.
-          </aside>
-        </section>
-        <section>
-          <img src="/images/timeline.png" />
-        </section>
-      </section>
-
-      <section>
-<section>
-  <h1>Profiling</h1>
-  <p>Wrap a code block in
-    <pre style="display: inline;"><code style="display: inline;" class="javascript">console.profile(label)</code></pre> and
-    <pre style="display: inline;"><code style="display: inline;" class="javascript">console.profileEnd()</code></pre> to profile a block of code using the browser profiler.
-  </p>
-  <pre><code class="javascript">
-  function KriegerClone (number) { this.number = number; }
-
-  var label = "Clone Krieger";
-  console.profile(label);
-  var clones = new Array(1000000);
-  for (var i = 0; i < 1000000; i++) {
-    clones[i] = new KriegerClone(i);
-  }
-  console.profileEnd(label);
-          </code></pre>
-</section>
-<section>
-  <img src="/images/profiling.png" />
-</section>
-</section>
 
       <section style="text-align: left;">
         <h1>THE END</h1>
@@ -343,17 +81,10 @@ console.log('Uses interjection %s', interjection);
           Get the slides:
           <pre>
               <code>
-git clone https://doug.wade@stash.redfin.com/scm/~doug.wade/presentations.git
+git clone https://github.com/doug-wade/slides
               </code>
             </pre>
         </p>
-				<p>
-					Read the docs:
-					<ul style="list-style: none;">
-						<li><a href="https://developers.google.com/web/tools/javascript/console/console-reference?hl=en">Console API</a></li>
-						<li><a href="https://developers.google.com/web/tools/javascript/console/console-write">Using the console</a></li>
-					</ul>
-				</p>
       </section>
 
     </div>
