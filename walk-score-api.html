@@ -15,10 +15,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
     <link rel="stylesheet" href="css/reveal.css">
-    <link rel="stylesheet" href="css/theme/league.css" id="league">
+    <link rel="stylesheet" href="css/theme/custom-night.css" id="custom-night">
 
     <!-- Code syntax highlighting -->
-    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="lib/css/custom-atom-one-dark.css">
 
     <!-- Printing and PDF exports -->
     <script>
@@ -382,7 +382,7 @@ function initMap() {
           <section>
             <pre><code>
 function getRoute() {
-  var url = "http://localhost:3000/api/route/6fffc9e7af7a9a444b12fd2ae2685281ab42bc1e";
+  var url = "/api/route/6fffc9e7af7a9a444b12fd2ae2685281ab42bc1e";
   var deferred = Q.defer();
   var xhr = new XMLHttpRequest();
 
@@ -413,7 +413,7 @@ function linestringToCoordinates(linestring) {
           </section>
 
           <section>
-            <img src="http://localhost:3000/route.png"></img>
+            <img src="/route.png"></img>
           </section>
         </section>
 
@@ -503,7 +503,7 @@ function initMap() {
           <section>
             <pre><code>
 function getTravelTimePolygon() {
-  var url = "http://localhost:3000/api/travel/2025%201st%20Avenue%20Suite%20500,%20Seattle,%20WA%2098121";
+  var url = "/api/travel/2025%201st%20Avenue%20Suite%20500,%20Seattle,%20WA%2098121";
   var deferred = Q.defer();
   var xhr = new XMLHttpRequest();
 
@@ -532,7 +532,7 @@ function convertCoordinates(walkscoreCoords) {
           </section>
 
           <section>
-            <img src="http://localhost:3000/polygon.png"></img>
+            <img src="/polygon.png"></img>
           </section>
         </section>
 
@@ -561,9 +561,18 @@ function convertCoordinates(walkscoreCoords) {
             Get the code:
             <pre>
               <code>
-git clone https://github.com/Redfin/WalkScoreApi.git
+git clone https://github.com/doug-wade/WalkScoreApi.git
               </code>
             </pre>
+          </p>
+          <p>
+            Get the slides:
+            <pre>
+                <code>
+  git clone https://github.com/doug-wade/slides
+                </code>
+              </pre>
+              Or in your browser: <a href="https://doug-wade.github.io/slides/walk-score-api.html">https://doug-wade.github.io/slides/walk-score-api.html</a>
           </p>
         </section>
 

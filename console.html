@@ -15,7 +15,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
   <link rel="stylesheet" href="css/reveal.css">
-  <link rel="stylesheet" href="css/theme/custom-night.css" id="theme">
+  <link rel="stylesheet" href="css/theme/custom-night.css" id="custom-night">
 
   <!-- Code syntax highlighting -->
   <link rel="stylesheet" href="lib/css/custom-atom-one-dark.css">
@@ -35,18 +35,6 @@
 </head>
 
 <body>
-	<script>
-	function KriegerClone (number) { this.number = number; }
-
-  var label = "Clone Krieger";
-  console.time(label);
-  var clones = new Array(1000000);
-  for (var i = 0; i < 1000000; i++) {
-    if (i === 500000) { console.timeStamp("Halfway there!") }
-    clones[i] = new KriegerClone(i);
-  }
-  console.timeEnd(label);
-	</script>
 
   <div class="reveal">
 
@@ -302,7 +290,7 @@ console.log('Uses interjection %s', interjection);
   console.timeEnd(label);
           </code></pre>
           <aside class="notes">
-            Note that time / timeEnd is unlike group / groupEnd and profile / profileEnd, neither of which require label to be passed to the end method.
+            Strangely, time / timeEnd is unlike group / groupEnd and profile / profileEnd, neither of which require label to be passed to the end method.
           </aside>
         </section>
         <section>
@@ -343,9 +331,10 @@ console.log('Uses interjection %s', interjection);
           Get the slides:
           <pre>
               <code>
-git clone https://doug.wade@stash.redfin.com/scm/~doug.wade/presentations.git
+git clone https://github.com/doug-wade/slides
               </code>
             </pre>
+            Or in your browser: <a href="https://doug-wade.github.io/slides/console.html">https://doug-wade.github.io/slides/console.html</a>
         </p>
 				<p>
 					Read the docs:
