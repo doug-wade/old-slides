@@ -9,262 +9,471 @@
   <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
   <meta name="author" content="Hakim El Hattab">
 
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
-	<link rel="stylesheet" href="css/reveal.css">
-	<link rel="stylesheet" href="css/theme/custom-night.css" id="theme">
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/custom-night.css" id="theme">
 
-	<!-- Code syntax highlighting -->
-	<link rel="stylesheet" href="lib/css/custom-atom-one-dark.css">
+  <!-- Code syntax highlighting -->
+  <link rel="stylesheet" href="lib/css/custom-atom-one-dark.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
 
-		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
-	</head>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
 
-	<body>
+  <body>
 
-		<div class="reveal">
+    <div class="reveal">
 
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<div class="slides">
-				<section>
-					<h2>Meet React Server</h2>
-					<h4>Blazing fast page load</h4>
-					<h4>buttery-smooth navigation</h4>
-					<img src="images/reactserver_logomark%402x.png" />
-					<p>
-						<small>Created by <a href="http://dougwade.io">Doug Wade</a> / <a href="http://twitter.com/AShedOfTools">@AShedOfTools</a></small>
-					</p>
-				</section>
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h2>Meet React Server</h2>
+          <h4>Blazing fast page load</h4>
+          <h4>buttery-smooth navigation</h4>
+          <img src="images/reactserver_logomark%402x.png" />
+          <p>
+            <small>Created by <a href="http://dougwade.io">Doug Wade</a> / <a href="http://twitter.com/AShedOfTools">@AShedOfTools</a></small>
+          </p>
 
-				<section>
-					<h2>Who am I?</h2>
-					<h3>Doug Wade</h3>
-					<p>
-						- React Server maintainer <br>
-						- Node enthusiast <br>
-						- Sounders Fan <br>
-					</p>
-				</section>
-
-				<section>
-					<h2>Server-side + SPA</h2>
-					<p>Server-side rendering for the first load</p>
-					<p>Client-side rendering for subsequent loads</p>
-
-					<aside class="notes">
-						Globally, most users are on mobile or are on poorly-performing
-							internet connections.  Sending an SPA is very slow for these users,
-							since they have to download the whole app before initial page load
-							Users without js, like web crawlers, may not even be able to use
-							this
-						Server-side rendering only is also slow, since a new html page needs
-							to be generated and downloaded, and only then will css and js be
-							downloaded, parsed, and executed. For subsequent loads, its smaller
-							and faster to send incremental data
-					</aside>
-				</section>
-
-				<section>
-					<h2>Buttery smooth page loads</h2>
-					<p>Break up the page into logical sections<p>
-					<p>Stream them as soon as they are ready<p>
-
-					<aside class="notes">
-						Internet users are impatient -- they don't even have time for video,
-							they need to have gifs
-						We want to get <i>something</i> on the page as soon as possible to
-							keep engagement, so we don't want to wait for the full page to
-							load before we send the header.
-					</aside>
-				</section>
-
-				<section>
-					<h2>RootElement + RootContainer</h2>
-					<pre><code>
-&ltRootContainer&gt
-	&ltRootElement when={getHeaderData()}&gt
-		&ltHeader /&gt
-	&lt/RootElement&gt
-	&ltRootElement when={getMainContentData()}&gt
-		&ltMainContent /&gt
-	&lt/RootElement&gt
-	&ltTheFold/&gt
-	&ltRootElement when={getSeoContentData()}&gt
-		&ltSeoContent /&gt
-	&lt/RootElement
-	&ltFooter/&gt
-&lt/RootContainer&gt
-					</code></pre>
-
-					<aside class="notes">
-						In this example, our header and main content are emitted when the
-							header data and mainContent data are resolved, respectively.  If
-							we wrote the header without any data, it'd be emitted immediately,
-							but often we put user data in headers.
-						The fold emits a script tag that makes the content currently on
-						 	page interactive.  This allows us to continue loading SEO content
-							below the fold for web crawlers without affecting how quickly our
-							users can interact with the page
-						We then emit the seo content and the footer as soon as the
-							getSeoContentData promise resolves.  The footer is rendered before
-							any other part of the page, but is held back to avoid the page
-							jumping, which is a dark pattern (think pressing a button on your
-							phone that wasn't there when you starting moving your thumb)
-					</aside>
-				</section>
-
-				<section>
-					<h2>Data bundling</h2>
-					<p>Ensure that you render the same markup to avoid page jank</p>
-					<p>Is reused for client transitions</p>
-
-					<aside class="notes"/>
-						If you don't render precisely the same markup when you create the
-							shadow DOM in the browser as the rendered html you send, then you
-							have to re-render the page before it becomes interactive, which
-							invalidates the benefit of rendering server-side.
-						By sending a bundle of data and code that is precisely the same as
-							was used for server rendering, we can be certain that the DOM
-							rendered will be exactly the same.
-						We reuse this data bundling capability for client-side rendering --
-							pages can request that the server prefetch the data bundle for
-							a client transition, and hold the data bundle until the user
-							requests it, making the page render startalingly quickly
-					<aside>
-				</section>
-
-				<section>
-					<h2>Be kind to your backend server</h2>
-					<p>Send late arrivals in a script tag to avoid making the same request
-						twice on the server and in the browser</p>
-
-					<aside class="notes">
-						If we wait for a struggling backend, users might refresh the page
-							or even worse, bounce
-						If we send the partial page after a set timeout, we double the load
-							on the server by making the same requests from the server and the
-							browser
-						Leave the http connection open to the browser, and push down late
-							arrivals in script tags so that we only make the data request
-							once and users don't bounce or refresh
-					</aside>
-				</section>
-
-				<section>
-					<h2>Lab.js</h2>
-					<p>Loading and Blocking Javascript (<a href="https://github.com/getify/LABjs">Lab.js</a>) prevents synchronous
-            JavaScript execution from tanking your hard-won performance gains</p>
-
-					<aside class="notes">
-						A single external synchronous JavaScript file can obliterate months
-							of careful performance work. There is literally no way in
-							`react-server` to load a JavaScript file in a blocking manner
-							(which is the default in most browsers and depressingly common on
-							the web).
-						Our `Page` API requires that developers define
-							their CSS and JavaScript in a structured way, and since there is
-							no way for developers to write directly to the output stream,
-							there simply is no way for them to include those assets in
-							incorrect ways.
-					</aside>
-				</section>
-
-				<section>
-          <section>
-					<h2>Request Local Storage</h2>
-					<p>Keep context on a single request through deeply-nested callbacks</p>
-
-					<aside class="notes">
-						While errbacks are a great way to handle errors, and the way to
-							handle asynchrony in node.js, it can be hard to keep the request
-							context when scheduling callbacks.  While you could pass data as
-							high-arity functions, it can be awkward to pull data through many
-							intermediate modules who may not need it, and since js is not
-							strongly typed, it can be easy to get the order wrong.
-						React Server give Request Local Storage namespaces out to track
-							individual requests as they pass through the web server.  This
-							makes it easy to retrieve request information like the request id
-							when deep in errbacks, and easy to share data between modules.
-					</aside>
-				</section>
-
-				<section>
-					<h2>Request Local Storage</h2>
-					<pre><code>
-import {getCurrentRequestContext} from "react-server";
-getCurrentRequestContext().getServerStash().res
-					</code></pre>
+          <aside class="notes">
+            <ul>
+              <li>Thank Max Stoiber for the intro to css</li>
+              <li>Express excitement to be in Amsterdam</li>
+              <li>Going to talk about my favorite FOSS project, though we'll see after James Kyle's talk ;)</li>
+          </aside>
         </section>
-      </section>
 
-				<section>
-					<h2>What's next?</h2>
-					<ul>
-						<li>Clustering</li>
-						<li>Multi-site support</li>
-						<li>Cookie and Feature detection</li>
-						<li>RootProvider for Redux</li>
-						<li>http 2</li>
-					</ul>
+        <section>
+          <h2>What's wrong?</h2>
+          <h4>Javascript Fatigue</h4>
+          <img style="max-width: 65%" src="images/js-fatigue.png" />
 
-					<aside class="notes">
-						We've been pulling apart our internal react server site to open source
-						Currently, we recommend using pm2 for clustering, but we have an
-							internal clustering api that uses the module tagger for ipc, which
-							gives you better control over your workers
-						We run many React Server instances, for stats collection, for
-							redfin.com, for print pages for market analysis, and developers
-							run them together.  We want to add starting multilple sites
-							together as a first class abstraction
-						Internally, we run a custom Flux that uses Reflux under the covers,
-							and we've struggled with updating state without a full page refresh
-							and duplicate data.  We're looking to add better support for Redux
-							by adding a RootProvider so we can take better advantage of the
-							client-side transitions (not forcing a refresh on state change)
-						James Snell has had his proposal for implementing http2 accepted
-							into node-eps, and has spun up a repo for implementing http2 in
-							node.  Because of the way that we've implemented our renderScripts
-							and renderHeadStylesheets methods, we'll be able to make the
-							switch without changes to client code, and upgrade where possible.
-					</aside>
-				</section>
+          <aside class="notes">
+            <ul>
+              <li>There are too many tools, and they change too often.</li>
+              <li>The tooling is complicated to set up, and inaccessible for "joe and jane developer".</li>
+              <li>it took us many months/tries/mistakes to get a universal react app working well.</li>
+          </aside>
+        </section>
 
-				<section>
-					<h2>Just focus on writing components and managing state<h2>
-					<h3>React Server handles the rest</h3>
+        <section>
+          <h2>What's wrong?</h2>
+          <h4>Slow Internet</h4>
+          <img style="max-width: 75%" src="/images/mobile-vs-fixed.png" />
 
-					<aside class="notes">
-						We've spent a lot of time thinking about performance, setting up
-							webpack, getting hot reloading set up, and handling the advanced
-							parts of React you don't want to deal with.  Advanced users can
-							get ahold of their express instance and webpack config themselves
-							and have the full power.
-					</aside>
-				</section>
+          <aside class="notes">
+            <ul>
+              <li>From the The International Telecommunication Union, a branch of the UN</li>
+              <li>Most internet users are on mobile.</li>
+              <li>Most internet users are not in the first world.</li>
+              <li>Most internet users don't have the patience to wait while your 4 MB bundle downloads</li>
+              <li>(47% of consumers expect a web page to load in 2 seconds or less).</li>
+          </aside>
+        </section>
 
-				<section style="text-align: left;">
-					<h2>Questions?</h2>
-					<p>
-						- <a href="http://react-server.io">Check out the docs site</a> <br>
+        <section>
+          <h2>What's wrong?</h2>
+          <h4>No Javascript</h4>
+          <img src="/images/no-js.jpg" />
+
+          <aside class="notes">
+            <ul>
+              <li>Primarily an SEO problem.</li>
+              <li>Some users blocking because of ads or security.</li>
+              <li>Has the added benefit of maintaining the "document" nature of the web</li>
+          </aside>
+        </section>
+
+        <section>
+          <h2>React Server</h2>
+          <h4>Batteries-included framework for universal react applications and
+            an ecosystem of associated build tools and middleware</h4>
+
+          <aside class="notes">
+            <ul>
+              <li>An Express middleware</li>
+              <li>Includes an associated build toolchain built on webpack</li>
+              <li>A constellation of modules in a monorepo that evolves together built with Lerna</li>
+              <li><i>just works</i> for beginners (addresses js fatigue)</li>
+              <li>customizable (custom webpack config, custom express middleware) for advanced users</li>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Server-side + SPA</h2>
+          <p>Server-side rendering for the first load</p>
+          <p>Client-side rendering for subsequent loads</p>
+
+          <aside class="notes">
+            <ul>
+              <li>Addresses slow and js-free internet</li>
+              <li>Do a server-render for the intial page load to get html content fast with no client js</li>
+              <li>Load the code for rendering subsequent pages to get blazing fast page loads afterwards with only incremental data</li>
+          </aside>
+        </section>
+
+        <section>
+          <img src="images/shamwow.jpg" />
+        </section>
+
+        <section>
+          <h2>Buttery smooth page loads</h2>
+          <p>Break up the page into logical sections<p>
+          <p>Stream them as soon as they are ready<p>
+
+          <aside class="notes">
+            <ul>
+              <li>Address impatient users by getting chunks on the page as soon as possible</li>
+              <li>Prevent users from clicking on the wrong element when the page "jumps" (Dark Pattern)</li>
+              <li>Treat the page like a document that "snaps in" as soon as it is ready</li>
+              <li>The page becomes interactive as soon as above-the-fold content is loaded but no sooner</li>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Blazing fast</h2>
+          <p>Precalculate data before client transitions with data bundling</p>
+          <p>Ensure that you render the same markup to avoid page jank</p>
+
+          <aside class="notes"/>
+            <ul>
+              <li>Send a bundle of data + code that was used for server rendering so the DOM render the same.</li>
+              <li>client-side rendering "prequests" that the server ready a data bundle and hold it until the request</li>
+            </ul>
+          <aside>
+        </section>
+
+        <section>
+          <h2>Be kind to your backend server</h2>
+          <p>Send late arrivals in a script tag to avoid making the same request
+            on the server and in the browser</p>
+
+          <aside class="notes">
+            <ul>
+              <li>wait for a struggling backend, users might refresh the page or bounce</li>
+              <li>If we send a partial on a timeout, it doubles the load on the server by making the same requests again</li>
+              <li>Instead: leave the http connection open to the browser, and push down late arrivals in script tags</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Page Api</h2>
+          <h4>Create pages, endpoints and middleware</h4>
+          <pre><code>
+// routes.js
+module.exports = {
+  routes: {
+    reactnlpage: {
+      path: ['/'],
+      method: 'get',
+      page: './reactnl'
+    }
+  }
+}
+
+// reactnl.js
+export default class ReactNlPage {
+  // lifecycle methods go here
+}
+          </code></pre>
+
+          <aside class="notes">
+            <ul>
+              <li>The page api is the heart of react server, shared by data endpoints, pages, and middleware</li>
+              <li>The routes file links pages, endpoints and middleware to a router</li>
+              <li>Pages are classes with lifecycle methods<li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Page Api</h2>
+          <p>lifecycle methods</p>
+
+          <pre><code>
+export default class ReactNlPage {
+  getTitle() {
+    return "ReactNl page"
+  }
+
+  getMetaTags() {
+    return [
+      { name: "example", content: "talk up React Server" },
+    ];
+  }
+}
+          </code></pre>
+
+          <aside class="notes">
+            <ul>
+              <li>Lifecycle methods are specially named methods that React Server calls as part of the page lifecycle</li>
+              <li>React Server provides "best-guess" defaults for all lifecycle methods</li>
+              <li>This example adds meta tags and a title to the page head</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Page Api</h2>
+          <p>Elements and routes</p>
+
+          <pre><code>
+let param;
+export default class ReactNlPage {
+  handleRoute(next) {
+    param = this.getRequest().getQuery().param;
+    return next();
+  }
+
+  getElements() {
+    return (&lth1&gtGot param {param}&lt/h1&gt);
+  }
+}
+          </code></pre>
+
+          <aside class="notes">
+            <ul>
+              <li>HandleRoute is called when the route is resolved and determines http status code</li>
+              <li>getElements gets the contents of the body tag</li>
+              <li>This example retrieves a param from the url and displays it in an h1</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Page Api</h2>
+          <p>scripts and stylesheets</p>
+
+          <pre><code>
+export default class ReactNlPage {
+  getHeadStylesheets() {
+    return [
+      "/styles/example.css"
+    ]
+  }
+
+  getBodyClasses() {
+    return ["responsive-page", "typography"];
+  }
+
+  getScripts() {
+    return [
+      "/scripts/tracking.js"
+    ]
+  }
+}
+          </code></pre>
+
+          <aside class="notes">
+            <ul>
+              <li>External synchronous js file can significantly impact perf by blocking</li>
+              <li>devs define css + js in a structured way so they can't tank perf</li>
+              <li>prepares us for http2 by creating a manifest of js + css to push<li>
+              <li>body classes allow you to add classes to the generated body tag</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>RootElement, RootContainer and TheFold</h2>
+          <pre><code>
+export default class ReactNlPage {
+  getElements() {
+    return (
+      &ltRootContainer&gt
+        &ltRootElement&gt
+          &ltHeader /&gt
+        &lt/RootElement&gt
+        &ltRootElement when={getMainContentData()}&gt
+          &ltMainContent /&gt
+        &lt/RootElement&gt
+        &ltTheFold/&gt
+        &ltRootElement when={getSeoContentData()}&gt
+          &ltSeoContent /&gt
+        &lt/RootElement
+       &ltFooter/&gt
+      &lt/RootContainer&gt);
+  }
+}
+          </code></pre>
+
+          <aside class="notes">
+            <ul>
+              <li>header without any data is emitted immediately</li>
+              <li>main content is emitted when header data is resolved</li>
+              <li>The fold emits a script tag that makes the content currently on page interactive</li>
+              <li>seo content and the footer are emitted when getSeoContentData promise resolves</li>
+              <li>The footer and header are rendered first, but footer is held back to avoid page jank</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Client Transitions</h2>
+          <h4>With Link</h4>
+          <pre><code>
+&ltLink path={path} bundleData={true}&gt...&lt/Link&gt
+          </code></pre>
+
+          <h4>Frameback</h4>
+          <pre><code>
+&ltLink path={path} frameback={true} reuseFrame={true}&gt...&lt/Link&gt
+          </code></pre>
+
+          <h4>Or with navigateTo</h4>
+          <pre><code>
+navigateTo(path, {bundleData: true});
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Request Local Storage</h2>
+          <p>Keep context on a single request</p>
+          <pre><code>
+import {getCurrentRequestContext} from "react-server";
+const response = getCurrentRequestContext().getServerStash().res;
+const path = getCurrentRequestContext().getCurrentPath();
+          </code></pre>
+
+          <aside class="notes">
+            <ul>
+              <li>Request Local Storage creates a storage object unique to a request</li>
+              <li>Exposes large parts of the React Server Api</li>
+              <li>For example: attach a request id to track errors emitted in deeply nested callbacks</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>React Server Agent</h2>
+          <h4>Make and cache requests</h4>
+          <pre><code>
+import {ReactServerAgent} from 'react-server';
+export default class ReactNlPage {
+  handleRoute(next) {
+    this.promise = ReactServerAgent
+      .get("/api/endpoint")
+      .then(res => res.body);
+  }
+
+  getElements() {
+    return (&ltRootElement when={this.promise}&gt
+      &ltEndpointConsumer /&gt
+    &lt/RootElement&gt);
+  }
+}
+          </code></pre>
+
+          <aside class="notes">
+            <ul>
+              <li>RSA is SuperAgent and has methods for normal http verbs: get, head, del, patch, post and put</li>
+              <li>Wrapped in a caching layer</li>
+              <li>Allows extension with plugResponse and plugRequest</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Navigator</h2>
+          <p>Keep track of navigation and history</p>
+          <pre><code>
+import {getCurrentRequestContext} from "react-server";
+const navigator = getCurrentRequestContext();
+
+navigator.on("navigateStart", onNavigateStart);
+navigator.on("page", onPage);
+navigator.on("navigateDone", onNavigateDone);
+navigator.on("loadComplete", onLoadComplete);
+          </code></pre>
+
+          <aside class="notes">
+            <ul>
+              <li>The navigator gives access to the event lifecycle of client transitions</li>
+              <li>The events are emitted in the order listed</li>
+          </aside>
+        </section>
+
+        <section>
+          <h2>A great dx</h2>
+          <h4>A cli that handles</h4>
+          <ul>
+            <li>Generating a new project</li>
+            <li>Code splitting</li>
+            <li>module tagging</li>
+            <li>hot reloading</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>Code splitting is done with the SERVER_SIDE constant provided at compile time</li>
+              <li>Module tagging is used to know from what module log lines are emitted</li>
+              <li>hot reloading is started from the cli using the --hot flag</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>What's next?</h2>
+          <ul>
+            <li>Clustering</li>
+            <li>Multi-site support</li>
+            <li>RootProvider for Redux</li>
+            <li>http 2</li>
+          </ul>
+
+          <aside class="notes">
+            <ul>
+              <li>Using pm2 for clustering works, but a clustering api w/ the module tagger for ipc allows better control of workers</li>
+              <li>add starting multilple sites together as a first class abstraction to improve stats collection</li>
+              <li>add better support for Redux by adding a RootProvider to avoid forcing a refresh on state change to synchronize stores</li>
+              <li>renderScripts and renderHeadStylesheets mean upgrading to http2 without changes to client code</li>
+          </aside>
+        </section>
+
+        <section>
+          <h2>Just focus on writing components and managing state<h2>
+          <h3>React Server handles the rest</h3>
+
+          <pre><code>
+$ npm install -g react-server-cli # OR yarn global add react-server-cli
+$ react-server init
+$ react-server add-page '/' Homepage
+$ react-server start
+          </code></pre>
+
+          <aside class="notes">
+            Advanced users can get ahold of their express instance and webpack config themselves and have full power.
+          </aside>
+        </section>
+
+        <section style="text-align: left;">
+          <h2>Questions?</h2>
+          <p>
+            - <a href="http://react-server.io">Check out the docs site</a> <br>
             - <a href="https://react-server.slack.com/">Chat with us on Slack</a> <br>
-						- <a href="https://github.com/redfin/react-server">Fork us on github</a> <br>
-						- <a href="https://github.com/hakimel/reveal.js">Slides made with Reveal.js</a>
-					</p>
-				</section>
+            - <a href="https://github.com/redfin/react-server">Fork us on github</a> <br>
+            - <a href="https://github.com/hakimel/reveal.js">Slides made with Reveal.js</a>
+          </p>
+
+          <aside class="notes">
+            The documentation site is the best resource -- it has the docs and is the most sophisticated example site
+          </aside>
+        </section>
     </div>
   </div>
 
