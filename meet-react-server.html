@@ -83,6 +83,7 @@
               <li>Most internet users are not in the first world.</li>
               <li>Most internet users don't have the patience to wait while your 4 MB bundle downloads</li>
               <li>(47% of consumers expect a web page to load in 2 seconds or less).</li>
+            </ul>
           </aside>
         </section>
 
@@ -96,6 +97,61 @@
               <li>Primarily an SEO problem.</li>
               <li>Some users blocking because of ads or security.</li>
               <li>Has the added benefit of maintaining the "document" nature of the web</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h2>There are solutions!</h2>
+          <div>
+            <img style="vertical-align: middle; margin-top: 3em; margin-right: 2em" src="images/next.png" />
+            <img style="vertical-align: middle; margin-top: 3em; margin-right: 2em" src="images/electrode.png" />
+            <img style="vertical-align: middle; margin-top: 3em" src="images/reactserver_logomark@2x.png" />
+          </div>
+
+          <aside class="notes">
+            <section>
+              <ul>
+                <li>
+                  They're p similar: they all come with a babel preset,
+                  webpack configuration
+                </li>
+
+                <li>
+                  Server
+                  Next: custom
+                  React Server: express
+                  Electrode: hapi koa or express
+                </li>
+
+                <li>
+                  Routing -- Each uses a `Link` component for client-side transitions
+                  Next: file system with custom configuration using programmatic api;
+                  React Server: routes file;
+                  Electrode: React router
+                </li>
+
+                <li>
+                  State management -- They all support redux
+                  Next: byo w/ redux example
+                  React Server: byo w/ redux bindings
+                  Electrode: Redux
+                </li>
+
+                <li>
+                  Service Worker Support
+                  Next: Yes
+                  React Server: No 😞
+                  Electrode: Yes
+                </li>
+
+                <li>
+                  runtime via
+                  Next: cdn
+                  React Server: bundle
+                  Electrode: bundle
+                </li>
+              </ul>
           </aside>
         </section>
 
@@ -186,16 +242,16 @@
 // routes.js
 module.exports = {
   routes: {
-    reactnlpage: {
+    examplepage: {
       path: ['/'],
       method: 'get',
-      page: './reactnl'
+      page: './example'
     }
   }
 }
 
-// reactnl.js
-export default class ReactNlPage {
+// example.js
+export default class ExamplePage {
   // lifecycle methods go here
 }
           </code></pre>
@@ -214,9 +270,9 @@ export default class ReactNlPage {
           <p>lifecycle methods</p>
 
           <pre><code>
-export default class ReactNlPage {
+export default class ExamplePage {
   getTitle() {
-    return "ReactNl page"
+    return "Example page"
   }
 
   getMetaTags() {
@@ -242,7 +298,7 @@ export default class ReactNlPage {
 
           <pre><code>
 let param;
-export default class ReactNlPage {
+export default class ExamplePage {
   handleRoute(next) {
     param = this.getRequest().getQuery().param;
     return next();
@@ -268,7 +324,7 @@ export default class ReactNlPage {
           <p>scripts and stylesheets</p>
 
           <pre><code>
-export default class ReactNlPage {
+export default class ExamplePage {
   getHeadStylesheets() {
     return [
       "/styles/example.css"
@@ -300,7 +356,7 @@ export default class ReactNlPage {
         <section>
           <h2>RootElement, RootContainer and TheFold</h2>
           <pre><code>
-export default class ReactNlPage {
+export default class ExamplePage {
   getElements() {
     return (
       &ltRootContainer&gt
@@ -338,11 +394,6 @@ export default class ReactNlPage {
 &ltLink path={path} bundleData={true}&gt...&lt/Link&gt
           </code></pre>
 
-          <h4>Frameback</h4>
-          <pre><code>
-&ltLink path={path} frameback={true} reuseFrame={true}&gt...&lt/Link&gt
-          </code></pre>
-
           <h4>Or with navigateTo</h4>
           <pre><code>
 navigateTo(path, {bundleData: true});
@@ -372,7 +423,7 @@ const path = getCurrentRequestContext().getCurrentPath();
           <h4>Make and cache requests</h4>
           <pre><code>
 import {ReactServerAgent} from 'react-server';
-export default class ReactNlPage {
+export default class ExamplePage {
   handleRoute(next) {
     this.promise = ReactServerAgent
       .get("/api/endpoint")
@@ -438,9 +489,9 @@ navigator.on("loadComplete", onLoadComplete);
         <section>
           <h2>What's next?</h2>
           <ul>
+            <li>Webpack (and hmr!) on the server</li>
             <li>Clustering</li>
             <li>Multi-site support</li>
-            <li>RootProvider for Redux</li>
             <li>http 2</li>
           </ul>
 
